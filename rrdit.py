@@ -15,19 +15,21 @@ class RRDit:
 
     def main(self):
 
+        path = "."
+
         # backup
-        for rrd in self.rrd_files(".", "MAC-ACCT"):
+        for rrd in self.rrd_files(path, "MAC-ACCT"):
             self.rrd_dump(rrd)
 
         # edit
-        for rrd in self.rrd_files(".", "MAC-ACCT"):
+        for rrd in self.rrd_files(path, "MAC-ACCT"):
             self.edit_rrd_counter_dsf_max(rrd, "INOCTETS", "1.2500000000e+09")
             self.edit_rrd_counter_dsf_max(rrd, "OUTOCTETS", "1.2500000000e+09")
-            self.rrd_dump(rrd)
 
     def edit_rrd_counter_dsf_max(self, rrd_file, ds_name, max_value):
 
-        max_input = "{}:{}".format(ds_name, max_value)
+        max_input = "{0}:{1}".format(ds_name, max_value)
+        print(max_input)
         call(["rrdtool", "tune", rrd_file, "--maximum", max_input])
 
     def rrd_dump(self, rrd_file):
