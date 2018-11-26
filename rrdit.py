@@ -1,6 +1,24 @@
 #!/usr/bin/env python
 
-# Run this script to edit various round robin database (RRD) settings that were originally set
+### PURPOSE ###
+#
+# Run this script to edit the RRD files created by mac-acct.pl.
+# Specifically addresses an issue in Netharbour where the max input value is 2gb only. This changes max value to 10gb.
+# See pull request: https://github.com/netharbour/netharbour/pull/6,
+# Modifies the max value data store field for INOCTETS and OUTOCTETS
+# NOTE: this script first backs-up all MAC accounting RRD files as .xml ('rrdtool dump'). It doesn't currently delete them
+#
+### REQUIRES ###
+#
+# Netharbour. https://github.com/netharbour/netharbour
+# Python >= 2.6
+#
+### RUNIT ###
+#
+# cd /var/www/html/netharbour/rrd-files (or wherever your RRD files exist)
+# git clone https://github.com/ctomkow/rrdit .
+# chmod a+x rrdit.py
+# python ./rrdit.py
 
 
 import os
@@ -39,6 +57,7 @@ class RRDit:
         call(["rrdtool", "dump", rrd_file], stdout=fd)
         fd.close()
 
+    # Not used at the moment
     def rrd_restore(self, rrd_file, xml_file):
 
         call(["rrdtool", "restore", xml_file, rrd_file, "--force-overwrite"])
